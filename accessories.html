@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f6f3">
+  <meta name="description" content="Explore illustrative AUREL vehicle accessories and parts.">
+  <title>Accessories and Parts — AUREL</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <style>
+    :root {
+      color-scheme: light;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --ink: #1b1d1b;
+      --muted: #686e69;
+      --paper: #f6f6f3;
+      --line: rgba(27,29,27,.12);
+      --blue: #1673d1;
+      font-family: var(--font);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: #fff; line-height: 1.5; }
+    body.bag-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    img { display: block; max-width: 100%; }
+    :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+    .wrap { width: min(1200px, calc(100% - 48px)); margin-inline: auto; }
+    .topbar { position: sticky; top: 0; z-index: 20; height: 68px; border-bottom: 1px solid rgba(23,25,24,.07); background: rgba(255,255,255,.94); backdrop-filter: blur(18px); }
+    .nav { display: flex; height: 100%; align-items: center; gap: 30px; }
+    .wordmark { font-size: 22px; font-weight: 700; letter-spacing: .24em; }
+    .nav-links { display: flex; align-items: center; gap: 32px; margin-left: auto; }
+    .nav-links a, .bag-button { color: #454a47; font-size: 13px; }
+    .nav-links a:hover, .bag-button:hover { color: var(--blue); }
+    .bag-button { padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; background: transparent; }
+    .menu-toggle { display: none; margin-left: auto; padding: 8px; border: 0; background: transparent; }
+    .notice { padding: 11px 20px; color: #4c514d; background: #f1f1ee; text-align: center; font-size: 12px; }
+    .notice strong { color: var(--ink); }
+    .intro { padding: 76px 0 34px; text-align: center; }
+    .eyebrow { margin: 0 0 12px; color: #526457; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    .intro h1 { margin-bottom: 15px; font-size: clamp(42px, 7vw, 78px); font-weight: 600; letter-spacing: -.06em; line-height: 1.02; }
+    .intro > p:last-child { max-width: 620px; margin: auto; color: var(--muted); font-size: 18px; }
+    .category-nav { display: flex; justify-content: center; gap: clamp(24px,5vw,68px); overflow-x: auto; padding: 18px 0 48px; }
+    .category-nav a { display: grid; min-width: 94px; justify-items: center; gap: 10px; color: #454a47; text-align: center; font-size: 12px; }
+    .category-nav img { width: 80px; height: 58px; object-fit: cover; border-radius: 8px; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+    .category-nav a:hover { color: var(--blue); }
+    .category-nav a:hover img { transform: scale(1.06); }
+    .category-nav a:focus-visible { border-radius: 8px; }
+    .filter-button { padding: 10px 17px; border: 1px solid #d9dbd7; border-radius: 999px; color: #414743; background: white; font-size: 13px; }
+    .filter-button:hover, .filter-button[aria-pressed="true"] { border-color: var(--ink); color: white; background: var(--ink); }
+    .spotlights { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+    .spotlight { display: flex; min-width: 0; min-height: 540px; flex-direction: column; overflow: hidden; border-radius: 23px; background: #f2f2f4; text-align: center; }
+    .spotlight-copy { max-width: 540px; margin-inline: auto; padding: 48px 34px 22px; }
+    .spotlight-copy h2 { margin-bottom: 12px; font-size: clamp(27px,3vw,36px); font-weight: 600; letter-spacing: -.04em; line-height: 1.12; }
+    .spotlight-copy p { margin-bottom: 15px; color: #4d524e; font-size: 15px; line-height: 1.5; }
+    .spotlight-link { color: var(--blue); font-size: 15px; }
+    .spotlight-link:hover { text-decoration: underline; }
+    .spotlight-image { width: 100%; height: 290px; margin-top: auto; object-fit: cover; object-position: center; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+    .spotlight-accessories .spotlight-image { object-position: center 57%; }
+    .spotlight-parts .spotlight-image { object-position: center 52%; }
+    .catalog { padding: 72px 0 90px; }
+    .catalog-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 26px; }
+    .catalog-head h2 { margin: 0; font-size: clamp(34px,5vw,54px); font-weight: 600; letter-spacing: -.05em; }
+    .catalog-head p { max-width: 420px; margin: 0; color: var(--muted); font-size: 14px; }
+    .catalog-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 27px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter-button { padding: 8px 14px; }
+    .catalog-search { width: min(280px,100%); min-height: 42px; padding: 0 14px; border: 1px solid #d9dbd7; border-radius: 999px; background: #fff; font-size: 13px; }
+    .product-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
+    .product { min-width: 0; overflow: hidden; border: 1px solid rgba(27,29,27,.07); border-radius: 20px; background: #fff; }
+    .product-image { height: clamp(230px,25vw,310px); overflow: hidden; background: #f1f1ee; }
+    .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+    .product-info { padding: 20px; }
+    .product-type { margin-bottom: 7px; color: #69716b; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .product-info h3 { min-height: 46px; margin-bottom: 7px; font-size: 17px; font-weight: 600; letter-spacing: -.02em; line-height: 1.3; }
+    .product-info p:not(.product-type) { min-height: 57px; margin-bottom: 12px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .product-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .product-price { font-size: 14px; font-weight: 600; }
+    .add-button { min-height: 36px; padding: 0 15px; border: 0; border-radius: 999px; color: white; background: var(--blue); font-size: 12px; font-weight: 600; }
+    .add-button:hover { background: #075fb4; }
+    .empty-results { display: none; padding: 40px 10px; color: var(--muted); text-align: center; }
+    .disclaimer { margin: 25px 0 0; color: #737973; font-size: 11px; line-height: 1.7; }
+    .footer { padding: 27px 0 35px; border-top: 1px solid var(--line); color: #6a706b; font-size: 11px; }
+    .footer a { color: var(--blue); }
+    .bag-overlay { position: fixed; inset: 0; z-index: 29; visibility: hidden; background: rgba(10,14,12,.42); opacity: 0; transition: opacity .25s ease, visibility .25s ease; }
+    .bag-overlay.is-open { visibility: visible; opacity: 1; }
+    .bag-panel { position: fixed; inset: 0 0 0 auto; z-index: 30; display: flex; width: min(440px,100%); flex-direction: column; padding: 24px; background: #fff; box-shadow: -12px 0 50px rgba(0,0,0,.14); transform: translateX(102%); transition: transform .3s ease; }
+    .bag-panel.is-open { transform: translateX(0); }
+    .bag-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 17px; border-bottom: 1px solid var(--line); }
+    .bag-head h2 { margin: 0; font-size: 24px; letter-spacing: -.04em; }
+    .bag-close { width: 38px; height: 38px; border: 0; border-radius: 50%; background: #f1f1ee; font-size: 22px; }
+    .bag-items { flex: 1; overflow: auto; padding: 8px 0; }
+    .bag-empty { padding: 45px 5px; color: var(--muted); text-align: center; }
+    .bag-row { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 13px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .bag-row img { width: 72px; height: 65px; border-radius: 9px; object-fit: cover; }
+    .bag-row h3 { margin: 0 0 4px; font-size: 13px; }
+    .bag-row p { margin: 0; color: var(--muted); font-size: 12px; }
+    .quantity { display: flex; align-items: center; gap: 8px; margin-top: 7px; }
+    .quantity button, .remove-item { padding: 2px 7px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-size: 12px; }
+    .remove-item { margin-top: 5px; border: 0; color: var(--blue); }
+    .bag-bottom { padding-top: 16px; border-top: 1px solid var(--line); }
+    .bag-subtotal { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 16px; font-weight: 600; }
+    .bag-bottom p { margin-bottom: 14px; color: var(--muted); font-size: 11px; }
+    .checkout-button { width: 100%; min-height: 44px; border: 0; border-radius: 999px; color: #fff; background: var(--ink); font-size: 13px; font-weight: 600; }
+    .bag-message { margin: 10px 0 0 !important; color: #315343 !important; }
+    @media (hover:hover) and (prefers-reduced-motion:no-preference) {
+      .spotlight:hover .spotlight-image, .product:hover .product-image img { transform: scale(1.04); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+      .category-nav a:hover img,
+      .spotlight:hover .spotlight-image,
+      .product:hover .product-image img { transform: none; }
+    }
+    @media (max-width: 900px) {
+      .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .product-image { height: clamp(210px,32vw,290px); }
+      .spotlight { min-height: 490px; }
+    }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 34px,600px); }
+      .topbar { height: 62px; }
+      .wordmark { font-size: 19px; }
+      .menu-toggle { display: block; }
+      .bag-button { margin-left: auto; }
+      .nav-links { position: absolute; inset: 62px 0 auto; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 24px 15px; border-bottom: 1px solid var(--line); background: var(--paper); }
+      .nav-links.is-open { display: flex; }
+      .nav-links a { padding: 12px 0; border-bottom: 1px solid var(--line); }
+      .nav-links a:last-child { border: 0; }
+      .notice { font-size: 10px; }
+      .intro { padding: 53px 0 25px; }
+      .intro > p:last-child { font-size: 15px; }
+      .category-nav { justify-content: flex-start; gap: 23px; margin-inline: -17px; padding: 13px 17px 29px; }
+      .category-nav a { min-width: 76px; font-size: 11px; }
+      .category-nav img { width: 68px; height: 52px; }
+      .spotlights { grid-template-columns: 1fr; gap: 14px; }
+      .spotlight { min-height: 470px; border-radius: 18px; }
+      .spotlight-copy { padding: 35px 22px 18px; }
+      .spotlight-copy p { font-size: 13px; }
+      .spotlight-image { height: 245px; }
+      .catalog { padding: 53px 0 65px; }
+      .catalog-head { align-items: flex-start; flex-direction: column; gap: 9px; }
+      .catalog-head p { font-size: 13px; }
+      .catalog-tools { align-items: stretch; flex-direction: column-reverse; }
+      .catalog-search { width: 100%; }
+      .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 5px; }
+      .filter-button { flex: 0 0 auto; }
+      .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+      .product { border-radius: 13px; }
+      .product-image { height: clamp(150px,48vw,220px); }
+      .product-info { padding: 12px; }
+      .product-info h3 { min-height: 0; font-size: 14px; }
+      .product-info p:not(.product-type) { min-height: 0; font-size: 11px; }
+      .product-bottom { align-items: flex-start; flex-direction: column; }
+      .add-button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="wordmark" href="index.html" aria-label="AUREL home">AUREL</a>
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links">☰</button>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html#models">Vehicles</a>
+        <a href="index.html#technology">Technology</a>
+        <a href="#accessories" data-filter-link="accessories">Accessories</a>
+        <a href="#parts" data-filter-link="parts">Parts</a>
+      </div>
+      <button class="bag-button" type="button" data-open-bag aria-label="Open shopping bag">Bag (<span data-bag-count>0</span>)</button>
+    </nav>
+  </header>
+  <div class="notice"><strong>AUREL is a concept brand.</strong> Products and prices are illustrative; this demo does not sell or ship items.</div>
+  <main>
+    <section class="intro wrap">
+      <p class="eyebrow">The details for every drive</p>
+      <h1>Accessories and parts.</h1>
+      <p>Thoughtful additions for the road ahead, from everyday essentials to the parts that keep a vehicle ready for its next mile.</p>
+    </section>
+    <nav class="category-nav wrap" aria-label="Shop by category">
+      <a href="#accessories" data-filter-link="accessories"><img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=240&q=78" alt=""><span>Charging</span></a>
+      <a href="#accessories" data-filter-link="accessories"><img src="https://images.unsplash.com/photo-1771402485643-1d0c4ceef421?auto=format&fit=crop&w=240&q=78" alt=""><span>Interior</span></a>
+      <a href="#accessories" data-filter-link="accessories"><img src="https://images.unsplash.com/photo-1672717957278-13476266184c?auto=format&fit=crop&w=240&q=78" alt=""><span>Carrying</span></a>
+      <a href="#accessories" data-filter-link="accessories"><img src="https://images.unsplash.com/photo-1542377281-73d08e3a10aa?auto=format&fit=crop&w=240&q=78" alt=""><span>Wheels</span></a>
+      <a href="#parts" data-filter-link="parts"><img src="https://images.unsplash.com/photo-1696494561430-de087dd0bd69?auto=format&fit=crop&w=240&q=78" alt=""><span>Replacement parts</span></a>
+    </nav>
+    <section class="spotlights wrap" aria-label="Featured accessories and parts">
+      <article class="spotlight spotlight-accessories">
+        <div class="spotlight-copy">
+          <p class="eyebrow">AUREL accessories</p>
+          <h2>Little things. Better journeys.</h2>
+          <p>Charging, carrying, and cabin essentials, chosen for the everyday.</p>
+          <a class="spotlight-link" href="#accessories" data-filter-link="accessories">Shop accessories&nbsp; ›</a>
+        </div>
+        <img class="spotlight-image" src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=85" alt="Electric vehicle charging cable connected at a car's charge port" loading="eager">
+      </article>
+      <article class="spotlight spotlight-parts">
+        <div class="spotlight-copy">
+          <p class="eyebrow">AUREL parts</p>
+          <h2>Ready for the road ahead.</h2>
+          <p>Explore essential replacement components and find the right fit for your vehicle.</p>
+          <a class="spotlight-link" href="#parts" data-filter-link="parts">Shop replacement parts&nbsp; ›</a>
+        </div>
+        <img class="spotlight-image" src="https://images.unsplash.com/photo-1696494561430-de087dd0bd69?auto=format&fit=crop&w=1200&q=85" alt="Close-up of an automotive brake disc and caliper" loading="eager">
+      </article>
+    </section>
+    <section class="catalog wrap" id="shop" aria-labelledby="shop-title">
+      <div class="catalog-head">
+        <h2 id="shop-title">Find your essentials.</h2>
+        <p>Explore accessories for the everyday and replacement parts to help keep your car ready for the road.</p>
+      </div>
+      <div class="catalog-tools">
+        <div class="filters" role="group" aria-label="Filter products">
+          <button class="filter-button" type="button" data-filter="all" aria-pressed="true">All products</button>
+          <button class="filter-button" type="button" data-filter="accessories" aria-pressed="false">Accessories</button>
+          <button class="filter-button" type="button" data-filter="parts" aria-pressed="false">Parts</button>
+        </div>
+        <input class="catalog-search" type="search" placeholder="Search products" aria-label="Search accessories and parts">
+      </div>
+      <div class="product-grid">
+        <article class="product" id="accessories" data-category="accessories" data-id="charging-cable" data-name="Portable charging cable" data-price="249" data-image="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=900&q=82">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=900&q=82" alt="Illustrative electric vehicle charging cable" loading="lazy"></div>
+          <div class="product-info"><p class="product-type">Charging accessory</p><h3>Portable charging cable</h3><p>A compact charging concept for keeping everyday journeys within reach.</p><div class="product-bottom"><span class="product-price">Illustrative $249</span><button class="add-button" type="button" data-add>Add to bag</button></div></div>
+        </article>
+        <article class="product" data-category="accessories" data-id="roof-cargo-box" data-name="Roof cargo box" data-price="395" data-image="https://images.unsplash.com/photo-1672717957278-13476266184c?auto=format&fit=crop&w=900&q=82">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1672717957278-13476266184c?auto=format&fit=crop&w=900&q=82" alt="Car equipped with a roof cargo box" loading="lazy"></div>
+          <div class="product-info"><p class="product-type">Travel accessory</p><h3>Roof cargo box</h3><p>Weather-ready extra storage for longer trips and bigger plans.</p><div class="product-bottom"><span class="product-price">Illustrative $395</span><button class="add-button" type="button" data-add>Add to bag</button></div></div>
+        </article>
+        <article class="product" data-category="accessories" data-id="all-weather-mats" data-name="All-weather floor mats" data-price="140" data-image="https://images.unsplash.com/photo-1771402485643-1d0c4ceef421?auto=format&fit=crop&w=900&q=82">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1771402485643-1d0c4ceef421?auto=format&fit=crop&w=900&q=82" alt="Close-up of a vehicle footwell and floor mat area" loading="lazy"></div>
+          <div class="product-info"><p class="product-type">Interior accessory</p><h3>All-weather floor mats</h3><p>A durable, easy-care mat concept for daily commutes and changing weather.</p><div class="product-bottom"><span class="product-price">Illustrative $140</span><button class="add-button" type="button" data-add>Add to bag</button></div></div>
+        </article>
+        <article class="product" data-category="accessories" data-id="alloy-wheel-upgrade" data-name="Alloy wheel upgrade" data-price="320" data-image="https://images.unsplash.com/photo-1542377281-73d08e3a10aa?auto=format&fit=crop&w=900&q=82">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1542377281-73d08e3a10aa?auto=format&fit=crop&w=900&q=82" alt="Close-up of a car's alloy wheel" loading="lazy"></div>
+          <div class="product-info"><p class="product-type">Exterior accessory</p><h3>Alloy wheel upgrade</h3><p>A considered wheel-style concept to give your vehicle a distinctive finish.</p><div class="product-bottom"><span class="product-price">Illustrative $320</span><button class="add-button" type="button" data-add>Add to bag</button></div></div>
+        </article>
+        <article class="product" id="parts" data-category="parts" data-id="powertrain-components" data-name="Powertrain components" data-price="42" data-image="https://images.unsplash.com/photo-1759419282068-eb664e0f0a17?auto=format&fit=crop&w=900&q=82">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1759419282068-eb664e0f0a17?auto=format&fit=crop&w=900&q=82" alt="Collection of automotive replacement components" loading="lazy"></div>
+          <div class="product-info"><p class="product-type">Replacement part</p><h3>Powertrain components</h3><p>A selection of vehicle service parts; compatibility depends on model and year.</p><div class="product-bottom"><span class="product-price">Illustrative $42</span><button class="add-button" type="button" data-add>Add to bag</button></div></div>
+        </article>
+        <article class="product" data-category="parts" data-id="wiper-blade-set" data-name="Wiper blade set" data-price="58" data-image="https://images.unsplash.com/photo-1508786250378-b165238d6e8b?auto=format&fit=crop&w=900&q=82">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1508786250378-b165238d6e8b?auto=format&fit=crop&w=900&q=82" alt="Close-up of car windshield wiper blades in the rain" loading="lazy"></div>
+          <div class="product-info"><p class="product-type">Replacement part</p><h3>Wiper blade set</h3><p>A replacement set concept for clear visibility in changing conditions.</p><div class="product-bottom"><span class="product-price">Illustrative $58</span><button class="add-button" type="button" data-add>Add to bag</button></div></div>
+        </article>
+        <article class="product" data-category="parts" data-id="brake-component-kit" data-name="Brake component kit" data-price="210" data-image="https://images.unsplash.com/photo-1696494561430-de087dd0bd69?auto=format&fit=crop&w=900&q=82">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1696494561430-de087dd0bd69?auto=format&fit=crop&w=900&q=82" alt="Close-up of a brake disc and caliper assembly" loading="lazy"></div>
+          <div class="product-info"><p class="product-type">Replacement part</p><h3>Brake component kit</h3><p>A concept replacement kit; exact vehicle fitment has not been determined.</p><div class="product-bottom"><span class="product-price">Illustrative $210</span><button class="add-button" type="button" data-add>Add to bag</button></div></div>
+        </article>
+        <article class="product" data-category="parts" data-id="wheel-assembly" data-name="Wheel assembly" data-price="480" data-image="https://images.unsplash.com/photo-1542377281-73d08e3a10aa?auto=format&fit=crop&w=900&q=82">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1542377281-73d08e3a10aa?auto=format&fit=crop&w=900&q=82" alt="Close-up of a vehicle wheel assembly" loading="lazy"></div>
+          <div class="product-info"><p class="product-type">Replacement part</p><h3>Wheel assembly</h3><p>A wheel and tire assembly concept with specifications still to be confirmed.</p><div class="product-bottom"><span class="product-price">Illustrative $480</span><button class="add-button" type="button" data-add>Add to bag</button></div></div>
+        </article>
+      </div>
+      <p class="empty-results" role="status">No items match that search. Try another term or category.</p>
+      <p class="disclaimer">AUREL is a fictional concept brand. Products, images, descriptions, prices, and availability are illustrative only and are not an offer for sale. No items are available to order. Stock photography is illustrative and does not depict AUREL production parts or accessories. Confirm fitment with a qualified retailer before purchasing vehicle parts.</p>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap">© 2026 AUREL Automotive · <a href="index.html">Return to AUREL</a> · Concept only; no real products or checkout are available.</div></footer>
+
+  <div class="bag-overlay" data-close-bag></div>
+  <aside class="bag-panel" role="dialog" aria-modal="true" aria-labelledby="bag-title" aria-hidden="true" inert>
+    <div class="bag-head"><h2 id="bag-title">Your bag</h2><button class="bag-close" type="button" data-close-bag aria-label="Close shopping bag">×</button></div>
+    <div class="bag-items" aria-live="polite"></div>
+    <div class="bag-bottom">
+      <div class="bag-subtotal"><span>Illustrative subtotal</span><span data-subtotal>$0</span></div>
+      <p>Concept pricing only. This demonstration does not process orders or payments.</p>
+      <button class="checkout-button" type="button" data-checkout>Preview checkout</button>
+      <p class="bag-message" hidden></p>
+    </div>
+  </aside>
+  <script>
+    const bag = new Map();
+    const bagPanel = document.querySelector(".bag-panel");
+    const bagOverlay = document.querySelector(".bag-overlay");
+    const bagItems = document.querySelector(".bag-items");
+    const bagCount = document.querySelector("[data-bag-count]");
+    const subtotal = document.querySelector("[data-subtotal]");
+    const bagMessage = document.querySelector(".bag-message");
+    const navMenu = document.querySelector(".nav-links");
+    const menuToggle = document.querySelector(".menu-toggle");
+    const openBagButton = document.querySelector("[data-open-bag]");
+    let activeFilter = "all";
+
+    function setBagOpen(open) {
+      bagPanel.classList.toggle("is-open", open);
+      bagOverlay.classList.toggle("is-open", open);
+      bagPanel.setAttribute("aria-hidden", String(!open));
+      bagPanel.inert = !open;
+      document.body.classList.toggle("bag-open", open);
+      if (open) document.querySelector(".bag-close").focus();
+      else openBagButton.focus();
+    }
+
+    function renderBag() {
+      let count = 0;
+      let total = 0;
+      bagItems.replaceChildren();
+      if (!bag.size) {
+        const empty = document.createElement("p");
+        empty.className = "bag-empty";
+        empty.textContent = "Your bag is empty. Explore the concept collection to add an item.";
+        bagItems.append(empty);
+      }
+      for (const [id, item] of bag) {
+        count += item.quantity;
+        total += item.price * item.quantity;
+        const row = document.createElement("article");
+        row.className = "bag-row";
+        row.innerHTML = `<img src="${item.image}" alt=""><div><h3>${item.name}</h3><p>Illustrative $${item.price}</p><div class="quantity"><button type="button" data-quantity="-1" data-id="${id}" aria-label="Remove one ${item.name}">−</button><span>${item.quantity}</span><button type="button" data-quantity="1" data-id="${id}" aria-label="Add one ${item.name}">+</button></div></div><button class="remove-item" type="button" data-remove="${id}">Remove</button>`;
+        bagItems.append(row);
+      }
+      bagCount.textContent = String(count);
+      subtotal.textContent = `$${total.toLocaleString("en-US")}`;
+    }
+
+    function applyCatalogFilters() {
+      const query = document.querySelector(".catalog-search").value.trim().toLowerCase();
+      let visible = 0;
+      document.querySelectorAll(".product").forEach((product) => {
+        const matchesFilter = activeFilter === "all" || product.dataset.category === activeFilter;
+        const matchesSearch = product.textContent.toLowerCase().includes(query);
+        const show = matchesFilter && matchesSearch;
+        product.hidden = !show;
+        if (show) visible += 1;
+      });
+      document.querySelector(".empty-results").style.display = visible ? "none" : "block";
+    }
+
+    function selectFilter(filter) {
+      activeFilter = filter;
+      document.querySelectorAll("[data-filter]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
+      });
+      applyCatalogFilters();
+    }
+
+    document.querySelectorAll("[data-filter]").forEach((button) => {
+      button.addEventListener("click", () => selectFilter(button.dataset.filter));
+    });
+    document.querySelectorAll("[data-filter-link]").forEach((link) => {
+      link.addEventListener("click", () => selectFilter(link.dataset.filterLink));
+    });
+    document.querySelector(".catalog-search").addEventListener("input", applyCatalogFilters);
+    document.querySelectorAll("[data-add]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const product = button.closest(".product");
+        const id = product.dataset.id;
+        const item = bag.get(id) || {
+          name: product.dataset.name,
+          price: Number(product.dataset.price),
+          image: product.dataset.image,
+          quantity: 0
+        };
+        item.quantity += 1;
+        bag.set(id, item);
+        renderBag();
+        button.textContent = "Added";
+        window.setTimeout(() => { button.textContent = "Add to bag"; }, 900);
+      });
+    });
+    bagItems.addEventListener("click", (event) => {
+      const quantityButton = event.target.closest("[data-quantity]");
+      const removeButton = event.target.closest("[data-remove]");
+      if (removeButton) bag.delete(removeButton.dataset.remove);
+      if (quantityButton) {
+        const item = bag.get(quantityButton.dataset.id);
+        if (item) {
+          item.quantity += Number(quantityButton.dataset.quantity);
+          if (item.quantity <= 0) bag.delete(quantityButton.dataset.id);
+        }
+      }
+      renderBag();
+    });
+    openBagButton.addEventListener("click", () => setBagOpen(true));
+    document.querySelectorAll("[data-close-bag]").forEach((element) => element.addEventListener("click", () => setBagOpen(false)));
+    document.querySelector("[data-checkout]").addEventListener("click", () => {
+      bagMessage.hidden = false;
+      bagMessage.textContent = "Demo only: AUREL has no live inventory or checkout. No order has been placed.";
+    });
+    menuToggle.addEventListener("click", () => {
+      const open = menuToggle.getAttribute("aria-expanded") !== "true";
+      menuToggle.setAttribute("aria-expanded", String(open));
+      menuToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+      navMenu.classList.toggle("is-open", open);
+    });
+    navMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+      navMenu.classList.remove("is-open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open navigation");
+    }));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && bagPanel.classList.contains("is-open")) setBagOpen(false);
+    });
+    if (location.hash === "#accessories" || location.hash === "#parts") {
+      selectFilter(location.hash.slice(1));
+    }
+    renderBag();
+  </script>
+</body>
+</html>

@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f6f3">
+  <meta name="description" content="Meet the AUREL range: considered electric vehicles, designed for the road ahead. Explore models and book a test drive.">
+  <title>AUREL — A new point of view</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <style>
+    :root {
+      color-scheme: light;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --ink: #1b1d1b;
+      --muted: #686e69;
+      --paper: #f6f6f3;
+      --white: #fff;
+      --green: #315343;
+      --line: rgba(27, 29, 27, .12);
+      --radius: 18px;
+      font-family: var(--font);
+      scroll-behavior: smooth;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--paper); line-height: 1.5; }
+    body.modal-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    img { display: block; max-width: 100%; }
+    :focus-visible { outline: 2px solid #1673d1; outline-offset: 3px; }
+    .wrap { width: min(1200px, calc(100% - 48px)); margin-inline: auto; }
+
+    .topbar {
+      position: sticky; inset-block-start: 0; z-index: 20;
+      height: 68px; background: rgba(255,255,255,.94);
+      border-bottom: 1px solid rgba(23,25,24,.07);
+      backdrop-filter: blur(18px);
+    }
+    .nav { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+    .wordmark { font: 700 22px/1 var(--font); letter-spacing: .24em; }
+    .nav-links { display: flex; align-items: center; gap: 36px; margin-left: auto; }
+    .nav-links a { font-size: 13px; color: #454a47; transition: color .2s ease; }
+    .nav-links a:hover { color: var(--green); }
+    .nav-action, .button {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 42px; padding: 0 19px; border: 0; border-radius: 999px;
+      color: #fff; background: var(--ink); font-size: 13px; font-weight: 600;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .nav-action:hover, .button:hover { background: var(--green); transform: translateY(-1px); }
+    .menu-toggle { display: none; border: 0; background: transparent; padding: 10px; color: var(--ink); }
+
+    .announcement { padding: 14px 20px; text-align: center; background: #ecece9; font-size: 13px; line-height: 1.5; }
+    .announcement a { color: #1673d1; white-space: nowrap; }
+    .announcement a:hover { text-decoration: underline; }
+    .catalog-index { overflow: hidden; padding: 106px 0 79px; background: #fff; }
+    .catalog-index h1 { margin: 0 0 79px; font: 600 clamp(56px, 7.5vw, 88px)/1 var(--font); letter-spacing: -.055em; }
+    .catalog-rail { display: flex; align-items: start; justify-content: space-between; gap: 21px; }
+    .catalog-item { display: flex; min-width: 100px; flex: 1 1 0; flex-direction: column; align-items: center; gap: 11px; text-align: center; font-size: 14px; font-weight: 600; }
+    .catalog-image { display: grid; width: 100%; height: 75px; place-items: center; overflow: hidden; border-radius: 4px; }
+    .catalog-image img { width: 116px; height: 72px; object-fit: cover; border-radius: 4px; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+    .catalog-icon { width: 50px; height: 50px; color: #575d59; }
+    .catalog-item:hover { color: var(--green); }
+
+    .drive-showcase { padding: 48px 0 42px; overflow: hidden; background: #fff; }
+    .showcase-heading { margin: 0 auto 24px; text-align: center; }
+    .showcase-heading .eyebrow { margin-bottom: 10px; color: var(--green); }
+    .showcase-heading h2 { margin: 0; font: 600 clamp(32px, 5vw, 54px)/1.08 var(--font); letter-spacing: -.045em; }
+    .showcase-stage { position: relative; width: min(1450px, calc(100% - 48px)); height: clamp(390px, 54vw, 690px); margin: auto; overflow: hidden; border-radius: 21px; color: #fff; background: #202a2a; isolation: isolate; }
+    .drive-slide { position: absolute; inset: 0; display: flex; align-items: end; padding: clamp(28px, 6vw, 78px); isolation: isolate; opacity: 0; visibility: hidden; transition: opacity .65s ease, visibility .65s ease; }
+    .drive-slide.is-active { z-index: 1; opacity: 1; visibility: visible; }
+    .drive-slide::after { position: absolute; z-index: 0; inset: 0; content: ""; background: linear-gradient(90deg, rgba(6,12,10,.72), rgba(6,12,10,.12) 76%), linear-gradient(0deg, rgba(6,12,10,.5), transparent 68%); }
+    .drive-slide img { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 7s linear; }
+    .drive-slide.is-active img { transform: scale(1.025); }
+    .slide-copy { position: relative; z-index: 1; max-width: 550px; }
+    .slide-copy .eyebrow { margin-bottom: 15px; color: rgba(255,255,255,.82); }
+    .slide-copy h3 { margin-bottom: 13px; font: 600 clamp(38px, 6vw, 72px)/1.02 var(--font); letter-spacing: -.05em; }
+    .slide-copy p:not(.eyebrow) { max-width: 450px; margin-bottom: 23px; color: rgba(255,255,255,.83); font-size: 15px; line-height: 1.65; }
+    .slide-tags { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 24px; }
+    .slide-tags span { padding: 8px 12px; border: 1px solid rgba(255,255,255,.45); border-radius: 999px; background: rgba(255,255,255,.11); font-size: 11px; backdrop-filter: blur(8px); }
+    .showcase-link { display: inline-flex; min-height: 40px; align-items: center; padding: 0 17px; border-radius: 999px; color: var(--ink); background: white; font-size: 12px; font-weight: 700; }
+    .showcase-link:hover { background: #e9eee9; }
+    .showcase-controls { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 22px 15px 0; }
+    .slide-pickers { display: flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 17px; border-radius: 999px; background: #ecece9; }
+    .slide-picker { position: relative; width: 30px; height: 20px; padding: 0; overflow: hidden; border: 0; border-radius: 999px; background: transparent; }
+    .slide-picker::before { position: absolute; inset: 7px 3px; content: ""; border-radius: 999px; background: #b6b9b5; }
+    .slide-picker[aria-current="true"] { width: 56px; }
+    .slide-picker[aria-current="true"]::before { background: #303432; }
+    .slide-picker[aria-current="true"]::after { position: absolute; inset: 7px auto 7px 3px; width: 0; content: ""; border-radius: inherit; background: #898e89; }
+    .drive-showcase.is-playing .slide-picker[aria-current="true"]::after { animation: slide-progress 6s linear forwards; }
+    .showcase-toggle { display: grid; width: 48px; height: 48px; place-items: center; border: 0; border-radius: 50%; color: var(--ink); background: #ecece9; }
+    .showcase-toggle:hover { background: #dfe1dc; }
+    .showcase-toggle svg { width: 16px; height: 16px; }
+    .showcase-toggle svg[hidden] { display: none; }
+    .showcase-arrow { display: grid; width: 40px; height: 40px; place-items: center; border: 1px solid #d5d8d2; border-radius: 50%; color: var(--ink); background: #fff; font-size: 18px; }
+    .showcase-arrow:hover { background: #ecece9; }
+    @keyframes slide-progress { to { width: calc(100% - 6px); } }
+
+    .lineup-gallery { padding: 66px 0 78px; overflow: hidden; background: #f1f1ee; }
+    .lineup-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 30px; }
+    .lineup-heading h2 { margin: 0; font: 600 clamp(34px, 5vw, 58px)/1.08 var(--font); letter-spacing: -.045em; }
+    .lineup-heading a { flex: 0 0 auto; margin-bottom: 6px; color: #1673d1; font-size: 14px; }
+    .lineup-heading a:hover { text-decoration: underline; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+    .gallery-card { min-width: 0; background: transparent; }
+    .gallery-photo { position: relative; height: clamp(245px, 29vw, 390px); overflow: hidden; border-radius: 18px; background: #e5e5e2; }
+    .gallery-photo img { width: 100%; height: 100%; object-fit: cover; transition: opacity .25s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+    .gallery-view-label { position: absolute; right: 13px; bottom: 13px; padding: 7px 10px; border-radius: 999px; color: #fff; background: rgba(15,18,17,.62); font-size: 10px; backdrop-filter: blur(8px); }
+    .gallery-copy { min-height: 338px; padding: 18px 12px 24px; text-align: center; }
+    .gallery-badge { margin: 0 0 10px; color: var(--green); font-size: 11px; font-weight: 650; letter-spacing: .08em; }
+    .gallery-copy h3 { margin-bottom: 9px; font: 600 clamp(22px, 2vw, 29px)/1.12 var(--font); letter-spacing: -.035em; }
+    .gallery-tagline { min-height: 50px; margin: 0 auto 18px; color: #303331; font: 500 15px/1.5 var(--font); }
+    .gallery-price { margin-bottom: 7px; color: #303331; font-size: 14px; line-height: 1.5; }
+    .gallery-finance { min-height: 34px; margin: 0 auto 17px; color: #555a57; font-size: 12px; line-height: 1.5; }
+    .gallery-features { display: flex; min-height: 28px; flex-wrap: wrap; justify-content: center; gap: 7px; margin-bottom: 18px; }
+    .gallery-features span { padding: 6px 9px; border-radius: 999px; color: #414743; background: #e8e9eb; font-size: 11px; }
+    .gallery-actions { display: flex; align-items: center; justify-content: center; gap: 24px; }
+    .gallery-learn { display: inline-flex; min-height: 42px; align-items: center; padding: 0 20px; border-radius: 999px; color: #fff; background: #0671e3; font-size: 14px; font-weight: 500; }
+    .gallery-learn:hover { background: #005fc5; }
+    .gallery-buy { color: #0671e3; font-size: 14px; }
+    .gallery-buy:hover { text-decoration: underline; }
+    .gallery-views { display: flex; justify-content: center; gap: 7px; padding: 14px 12px 8px; background: transparent; }
+    .gallery-view { min-height: 29px; padding: 0 11px; border: 1px solid #d5d8d2; border-radius: 999px; color: #4a504c; background: transparent; font-size: 11px; }
+    .gallery-view[aria-current="true"] { border-color: #343a36; color: #fff; background: #343a36; }
+    .gallery-view:focus-visible { outline: 2px solid #1673d1; outline-offset: 2px; }
+
+    .shopping-help { padding: 70px 0 84px; background: #f1f1ee; }
+    .shopping-help-heading { margin-bottom: 28px; }
+    .shopping-help-heading .eyebrow { margin-bottom: 10px; color: var(--green); }
+    .shopping-help-heading h2 { margin: 0; font: 600 clamp(34px, 5vw, 56px)/1.08 var(--font); letter-spacing: -.045em; }
+    .shopping-help-viewport { overflow: hidden; }
+    .shopping-help-grid { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .shopping-help-grid::-webkit-scrollbar { display: none; }
+    .shopping-help-card { position: relative; display: flex; min-width: 0; min-height: 610px; flex: 0 0 calc((100% - 40px) / 3); flex-direction: column; overflow: hidden; border: 1px solid rgba(27,29,27,.035); border-radius: 22px; background: #fff; scroll-snap-align: start; }
+    .shopping-help-copy { padding: 32px 32px 22px; }
+    .shopping-help-copy .eyebrow { margin-bottom: 14px; color: #626863; font-size: 10px; }
+    .shopping-help-copy h3 { max-width: 390px; margin-bottom: 14px; font: 600 clamp(26px, 2.45vw, 34px)/1.12 var(--font); letter-spacing: -.045em; }
+    .shopping-help-copy p:not(.eyebrow) { margin-bottom: 18px; color: #4e5450; font-size: 15px; line-height: 1.55; }
+    .shopping-help-link { display: inline-flex; min-height: 40px; align-items: center; gap: 7px; padding: 0; border: 0; color: #1673d1; background: transparent; font-size: 14px; font-weight: 500; text-align: left; }
+    .shopping-help-link:hover { text-decoration: underline; }
+    .shopping-help-image-wrap { position: relative; margin-top: auto; }
+    .shopping-help-image { width: 100%; height: 245px; object-fit: cover; object-position: center; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+    .shopping-help-card-delivery .shopping-help-image { object-position: center 72%; }
+    .shopping-help-card-specialist .shopping-help-image { height: 290px; object-position: center 24%; background: #f0f0ee; }
+    .shopping-help-card-specialist .shopping-help-image-wrap::after { position: absolute; left: 16px; bottom: 17px; padding: 7px 10px; border-radius: 999px; content: "Illustrative stock portrait"; color: #fff; background: rgba(15,18,17,.62); font-size: 10px; backdrop-filter: blur(8px); }
+    .shopping-help-expand { position: absolute; right: 16px; bottom: 16px; display: grid; width: 42px; height: 42px; place-items: center; border: 0; border-radius: 50%; color: #414743; background: rgba(245,245,247,.94); font-size: 23px; line-height: 1; box-shadow: 0 1px 5px rgba(0,0,0,.12); transition: transform .2s ease, background .2s ease; }
+    .shopping-help-expand:hover { transform: scale(1.05); background: #fff; }
+    .shopping-help-details { padding: 18px 30px 24px; border-top: 1px solid var(--line); background: #fff; }
+    .shopping-help-details p { margin: 0; color: #4e5450; font-size: 13px; line-height: 1.6; }
+    .shopping-help-controls { display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding-top: 24px; }
+    .shopping-help-arrow { display: grid; width: 48px; height: 48px; place-items: center; border: 0; border-radius: 50%; color: #414743; background: #e5e5e9; font-size: 24px; line-height: 1; transition: background .2s ease, color .2s ease, opacity .2s ease; }
+    .shopping-help-arrow:hover:not(:disabled) { color: #fff; background: #343a36; }
+    .shopping-help-arrow:disabled { cursor: default; opacity: .42; }
+    .shopping-help-arrow:focus-visible, .shopping-help-expand:focus-visible { outline: 2px solid #1673d1; outline-offset: 3px; }
+
+    .essentials { padding: 18px 0 78px; background: #fff; }
+    .essentials-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 48px; }
+    .essentials-heading h2 { margin: 0; font: 600 clamp(38px, 5vw, 58px)/1.05 var(--font); letter-spacing: -.05em; }
+    .essentials-heading a { flex: 0 0 auto; margin-bottom: 7px; color: #1673d1; font-size: 15px; }
+    .essentials-heading a:hover, .essential-link:hover { text-decoration: underline; }
+    .essentials-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    .essential-card { display: flex; min-width: 0; min-height: 570px; flex-direction: column; overflow: hidden; border-radius: 24px; background: #f2f2f4; text-align: center; }
+    .essential-copy { max-width: 530px; margin-inline: auto; padding: 56px 34px 25px; }
+    .essential-copy h3 { margin-bottom: 12px; font: 600 clamp(25px, 2.7vw, 33px)/1.14 var(--font); letter-spacing: -.035em; }
+    .essential-copy p { margin-bottom: 15px; color: #414542; font-size: 16px; line-height: 1.5; }
+    .essential-link { color: #1673d1; font-size: 15px; }
+    .essential-image { width: 100%; height: 285px; margin-top: auto; object-fit: cover; object-position: center; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+    .essential-card-charging .essential-image { object-position: center 58%; }
+    .essential-card-cabin .essential-image { object-position: center 56%; }
+    .hero-visual { overflow: hidden; }
+    .hero-visual img { transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+
+    .hero {
+      overflow: hidden; padding-top: 65px; text-align: center; background: var(--paper);
+    }
+    .hero-content { max-width: 840px; }
+    .eyebrow { margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    .hero .eyebrow { margin-bottom: 12px; color: var(--green); }
+    .hero h2 { margin-bottom: 12px; font: 600 clamp(54px, 8vw, 94px)/1 var(--font); letter-spacing: -.065em; }
+    .hero-copy { margin-bottom: 22px; color: #4f5551; font: 500 clamp(19px, 2.6vw, 25px)/1.35 var(--font); letter-spacing: -.02em; }
+    .hero-actions { display: flex; align-items: center; justify-content: center; gap: 22px; }
+    .hero .button { min-height: 40px; padding-inline: 18px; background: #1673d1; }
+    .hero .button:hover { background: #105ca9; }
+    .text-link { color: #1673d1; font-size: 14px; font-weight: 500; }
+    .text-link:hover { text-decoration: underline; }
+    .hero-visual { width: min(1320px, 100%); margin: 33px auto 0; }
+    .hero-visual img { width: 100%; height: clamp(280px, 41vw, 535px); object-fit: cover; object-position: center 57%; }
+    .hero-caption { margin: 10px 24px 0; color: var(--muted); font-size: 11px; letter-spacing: .04em; }
+    .hero-specs { display: flex; align-items: center; justify-content: center; gap: clamp(22px, 6vw, 86px); padding: 25px 20px 34px; border-bottom: 1px solid var(--line); }
+    .hero-specs div { display: grid; gap: 5px; }
+    .hero-specs strong { font: 600 13px var(--font); }
+    .hero-specs span { color: var(--muted); font-size: 11px; }
+
+    .intro { padding-block: 106px 90px; text-align: center; }
+    .intro .eyebrow { color: var(--green); }
+    .intro h2 { max-width: 820px; margin: 0 auto 20px; font: 500 clamp(34px, 5.3vw, 66px)/1.08 var(--font); letter-spacing: -.045em; }
+    .intro p:last-child { max-width: 590px; margin: auto; color: var(--muted); line-height: 1.75; font-size: 15px; }
+
+    .models { padding-block: 20px 112px; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 27px; }
+    .section-heading h2 { margin: 0; font: 600 clamp(28px, 4vw, 42px)/1.1 var(--font); letter-spacing: -.04em; }
+    .section-heading p { max-width: 360px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .model-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; }
+    .model-card { overflow: hidden; border-radius: var(--radius); background: #e9e9e5; }
+    .model-image { height: 270px; overflow: hidden; background: #dedfdb; }
+    .model-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+    .model-info { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 23px 24px; }
+    .model-info h3 { margin: 0 0 5px; font: 600 21px var(--font); letter-spacing: -.025em; }
+    .model-info p { margin: 0; color: var(--muted); font-size: 12px; }
+    .arrow-link { display: grid; width: 38px; height: 38px; place-items: center; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 50%; font-size: 18px; transition: background .2s, color .2s; }
+    .arrow-link:hover { color: white; background: var(--ink); }
+
+    .feature {
+      position: relative; min-height: 520px; display: grid; align-items: center; overflow: hidden;
+      border-radius: 22px; color: white; background: #26332e;
+    }
+    .feature::before { position: absolute; inset: 0; content: ""; background: linear-gradient(90deg,rgba(8,15,12,.77),rgba(8,15,12,.06)), url("https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=2000&q=86") center / cover; }
+    .feature-content { position: relative; max-width: 500px; padding: 60px; }
+    .feature h2 { margin-bottom: 16px; font: 500 clamp(34px, 5vw, 58px)/1.04 var(--font); letter-spacing: -.045em; }
+    .feature p:not(.eyebrow) { max-width: 390px; margin-bottom: 26px; color: rgba(255,255,255,.79); font-size: 14px; line-height: 1.7; }
+    .feature .eyebrow { color: #cbd9ce; }
+
+    .promise { padding-block: 112px 105px; }
+    .promise-head { max-width: 630px; margin-bottom: 43px; }
+    .promise-head .eyebrow { color: var(--green); }
+    .promise-head h2 { margin-bottom: 16px; font: 500 clamp(36px, 5vw, 58px)/1.05 var(--font); letter-spacing: -.045em; }
+    .promise-head p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .promise-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+    .promise-item { padding: 25px 24px 8px 0; }
+    .promise-item + .promise-item { padding-left: 24px; border-left: 1px solid var(--line); }
+    .promise-item span { display: block; margin-bottom: 17px; color: var(--green); font-size: 12px; font-weight: 700; letter-spacing: .12em; }
+    .promise-item h3 { margin-bottom: 9px; font: 600 17px var(--font); }
+    .promise-item p { max-width: 300px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+
+    .cta { padding: 52px 0 95px; text-align: center; }
+    .cta-box { padding: 66px 24px; border-radius: 22px; background: #e9ebe6; }
+    .cta-box .eyebrow { color: var(--green); }
+    .cta h2 { margin-bottom: 14px; font: 500 clamp(35px, 5vw, 58px)/1.07 var(--font); letter-spacing: -.045em; }
+    .cta p { margin-bottom: 25px; color: var(--muted); font-size: 14px; }
+    .footer { padding: 26px 0 33px; border-top: 1px solid var(--line); }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-bottom: 23px; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 22px; color: #5e635f; font-size: 12px; }
+    .footer-bottom { padding-top: 17px; border-top: 1px solid var(--line); color: #777b78; font-size: 11px; line-height: 1.7; }
+
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      .catalog-item:hover .catalog-image img,
+      .gallery-card:hover .gallery-photo img,
+      .shopping-help-card:hover .shopping-help-image,
+      .essential-card:hover .essential-image,
+      .hero-visual:hover img,
+      .model-card:hover .model-image img { transform: scale(1.04); }
+      .showcase-stage:hover .drive-slide.is-active img { transform: scale(1.055); transition-duration: .8s; }
+    }
+
+    .modal { position: fixed; inset: 0; z-index: 40; display: none; place-items: center; padding: 20px; background: rgba(10,14,12,.6); }
+    .modal.is-open { display: grid; }
+    .dialog { position: relative; width: min(480px, 100%); padding: 35px; border-radius: 18px; background: var(--paper); box-shadow: 0 24px 80px rgba(0,0,0,.25); }
+    .dialog h2 { margin-bottom: 9px; font: 600 29px var(--font); letter-spacing: -.035em; }
+    .dialog > p { margin-bottom: 23px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .close-modal { position: absolute; top: 17px; right: 17px; display: grid; width: 34px; height: 34px; place-items: center; border: 0; border-radius: 50%; background: #e6e7e2; font-size: 20px; }
+    .field { display: grid; gap: 7px; margin-bottom: 14px; }
+    .field label { font-size: 12px; font-weight: 600; }
+    .field input, .field select { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid #d5d8d2; border-radius: 9px; color: var(--ink); background: #fff; outline: none; }
+    .field input:focus, .field select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(38,75,60,.13); }
+    .dialog .button { width: 100%; margin-top: 4px; }
+    .form-message { display: none; margin: 14px 0 0; color: var(--green); font-size: 13px; line-height: 1.5; }
+    .form-message.is-visible { display: block; }
+
+    @media (max-width: 760px) {
+      .wrap { width: min(100% - 34px, 600px); }
+      .topbar { height: 62px; }
+      .wordmark { font-size: 19px; }
+      .nav-action { display: none; }
+      .menu-toggle { display: block; }
+      .nav-links { position: absolute; inset: 62px 0 auto; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 10px 24px 18px; background: var(--paper); border-bottom: 1px solid var(--line); }
+      .nav-links.is-open { display: flex; }
+      .nav-links a { padding: 13px 0; border-bottom: 1px solid var(--line); }
+      .nav-links a:last-child { border: 0; }
+      .announcement { padding: 12px 18px; font-size: 11px; }
+      .catalog-index { padding: 72px 0 49px; }
+      .catalog-index h1 { margin-bottom: 45px; font-size: clamp(52px, 15vw, 72px); }
+      .catalog-rail { justify-content: flex-start; gap: 16px; overflow-x: auto; margin-inline: -17px; padding: 0 17px 12px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+      .catalog-item { min-width: 105px; flex: 0 0 105px; gap: 8px; scroll-snap-align: start; font-size: 12px; }
+      .catalog-image { height: 65px; }
+      .catalog-image img { width: 100px; height: 62px; }
+      .catalog-icon { width: 44px; height: 44px; }
+      .drive-showcase { padding: 39px 0 28px; }
+      .showcase-stage { width: calc(100% - 24px); height: 500px; border-radius: 18px; }
+      .drive-slide { padding: 28px 22px; }
+      .slide-copy h3 { font-size: clamp(36px, 10vw, 54px); }
+      .slide-copy p:not(.eyebrow) { font-size: 13px; }
+      .slide-tags { gap: 6px; }
+      .slide-tags span { padding: 7px 9px; font-size: 10px; }
+      .showcase-arrow { display: none; }
+      .showcase-controls { gap: 9px; padding-top: 16px; }
+      .lineup-gallery { padding: 48px 0 55px; }
+      .lineup-heading { align-items: start; flex-direction: column; gap: 11px; margin-bottom: 21px; }
+      .lineup-heading a { margin-bottom: 0; font-size: 13px; }
+      .gallery-grid { display: flex; gap: 14px; overflow-x: auto; margin-inline: -17px; padding: 0 17px 12px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+      .gallery-card { flex: 0 0 min(82vw, 340px); scroll-snap-align: start; border-radius: 18px; }
+      .gallery-photo { height: 265px; }
+      .gallery-copy { min-height: 350px; padding: 17px; }
+      .gallery-tagline { min-height: 42px; }
+      .shopping-help { padding: 52px 0 58px; }
+      .shopping-help-heading { margin-bottom: 20px; }
+      .shopping-help-grid { gap: 14px; padding-bottom: 4px; }
+      .shopping-help-card { min-height: 0; flex: 0 0 min(82vw, 340px); border-radius: 18px; }
+      .shopping-help-copy { padding: 25px 23px 20px; }
+      .shopping-help-copy h3 { max-width: 330px; font-size: 29px; }
+      .shopping-help-copy p:not(.eyebrow) { font-size: 14px; }
+      .shopping-help-image { height: 220px; }
+      .shopping-help-card-specialist .shopping-help-image { height: 245px; }
+      .shopping-help-controls { padding-top: 18px; }
+      .shopping-help-arrow { width: 44px; height: 44px; }
+      .shopping-help-details { padding: 16px 22px 21px; }
+      .essentials { padding: 8px 0 58px; }
+      .essentials-heading { align-items: flex-start; flex-direction: column; gap: 12px; margin-bottom: 23px; }
+      .essentials-heading h2 { font-size: clamp(36px, 10vw, 48px); }
+      .essentials-heading a { margin-bottom: 0; font-size: 13px; }
+      .essentials-grid { grid-template-columns: 1fr; gap: 14px; }
+      .essential-card { min-height: 490px; border-radius: 19px; }
+      .essential-copy { padding: 37px 24px 20px; }
+      .essential-copy p { font-size: 14px; }
+      .essential-image { height: 245px; }
+      .hero { padding-top: 51px; }
+      .hero h2 { font-size: clamp(52px, 13vw, 76px); }
+      .hero-copy { max-width: 330px; margin-inline: auto; font-size: 19px; }
+      .hero-visual { width: 100%; margin-top: 30px; }
+      .hero-visual img { height: clamp(250px, 67vw, 390px); object-position: 54% center; }
+      .hero-specs { gap: 18px; padding-inline: 12px; }
+      .hero-specs strong { font-size: 11px; }
+      .hero-specs span { max-width: 100px; font-size: 10px; }
+      .intro { padding-block: 78px 67px; }
+      .models { padding-bottom: 78px; }
+      .section-heading { align-items: start; flex-direction: column; }
+      .model-grid { grid-template-columns: 1fr; gap: 13px; }
+      .model-image { height: clamp(220px, 58vw, 350px); }
+      .feature { min-height: 540px; }
+      .feature::before { background-position: 58% center; }
+      .feature-content { padding: 34px 27px; }
+      .promise { padding-block: 78px; }
+      .promise-grid { grid-template-columns: 1fr; }
+      .promise-item, .promise-item + .promise-item { padding: 22px 0; border-left: 0; border-bottom: 1px solid var(--line); }
+      .promise-item:last-child { border-bottom: 0; }
+      .cta { padding: 15px 0 70px; }
+      .cta-box { padding: 52px 18px; }
+      .footer-top { align-items: flex-start; flex-direction: column; }
+      .footer-links { gap: 15px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+      .catalog-item:hover .catalog-image img,
+      .showcase-stage:hover .drive-slide.is-active img,
+      .gallery-card:hover .gallery-photo img,
+      .shopping-help-card:hover .shopping-help-image,
+      .essential-card:hover .essential-image,
+      .hero-visual:hover img,
+      .model-card:hover .model-image img { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="wordmark" href="#" aria-label="AUREL home">AUREL</a>
+      <div class="nav-links" id="nav-links">
+        <a href="#models">Our vehicles</a>
+        <a href="#approach">Our approach</a>
+        <a href="#technology">Technology</a>
+        <a href="#contact">Visit us</a>
+      </div>
+      <button class="nav-action" type="button" data-open-modal>Book a test drive</button>
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <div class="announcement">
+    Discover the AUREL electric range and find your next drive.
+    <a href="#models">Explore the models&nbsp; ›</a>
+  </div>
+
+  <main>
+    <section class="catalog-index" aria-labelledby="catalog-title">
+      <div class="wrap">
+        <h1 id="catalog-title">AUREL</h1>
+        <nav class="catalog-rail" aria-label="Explore AUREL">
+          <a class="catalog-item" href="#model-a7">
+            <span class="catalog-image"><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=320&q=75" alt=""></span>
+            <span>AUREL A7</span>
+          </a>
+          <a class="catalog-item" href="#model-x5">
+            <span class="catalog-image"><img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=320&q=75" alt=""></span>
+            <span>AUREL X5</span>
+          </a>
+          <a class="catalog-item" href="#model-s4">
+            <span class="catalog-image"><img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=320&q=75" alt=""></span>
+            <span>AUREL S4</span>
+          </a>
+          <a class="catalog-item" href="#models">
+            <span class="catalog-image"><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=320&q=75" alt=""></span>
+            <span>AUREL GT</span>
+          </a>
+          <a class="catalog-item" href="#models">
+            <span class="catalog-image"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=320&q=75" alt=""></span>
+            <span>AUREL X7</span>
+          </a>
+          <a class="catalog-item" href="#contact">
+            <span class="catalog-image"><img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=320&q=75" alt=""></span>
+            <span>AUREL S6</span>
+          </a>
+          <a class="catalog-item" href="#contact">
+            <span class="catalog-image"><img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=320&q=75" alt=""></span>
+            <span>AUREL E1</span>
+          </a>
+        </nav>
+      </div>
+    </section>
+
+    <section class="drive-showcase" id="drive-showcase" aria-labelledby="showcase-title">
+      <div class="showcase-heading wrap">
+        <p class="eyebrow">Take the scenic route</p>
+        <h2 id="showcase-title">A closer look at the drive.</h2>
+      </div>
+      <div class="showcase-stage">
+        <article class="drive-slide is-active" data-slide aria-hidden="false">
+          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2200&q=88" alt="Illustrative photograph of a sports coupe on a mountain road">
+          <div class="slide-copy">
+            <p class="eyebrow">AUREL A7 · Grand touring</p>
+            <h3>Make the long way home your favorite.</h3>
+            <p>Settled electric power, a quiet cabin, and room to let the journey unfold.</p>
+            <div class="slide-tags"><span>All-electric</span><span>Long-distance comfort</span><span>Driver-first design</span></div>
+            <a class="showcase-link" href="#model-a7">Explore AUREL A7</a>
+          </div>
+        </article>
+        <article class="drive-slide" data-slide aria-hidden="true" inert>
+          <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=2200&q=88" alt="Illustrative photograph of an SUV on a scenic road">
+          <div class="slide-copy">
+            <p class="eyebrow">AUREL X5 · All-electric SUV</p>
+            <h3>Room for whatever comes next.</h3>
+            <p>Versatile space and confident capability, ready for the everyday and beyond.</p>
+            <div class="slide-tags"><span>Flexible space</span><span>Confident capability</span><span>All-electric</span></div>
+            <a class="showcase-link" href="#model-x5">Explore AUREL X5</a>
+          </div>
+        </article>
+        <article class="drive-slide" data-slide aria-hidden="true" inert>
+          <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=2200&q=88" alt="Illustrative photograph of a sedan in the city">
+          <div class="slide-copy">
+            <p class="eyebrow">AUREL S4 · Sports sedan</p>
+            <h3>Composure with a pulse.</h3>
+            <p>Responsive handling and a thoughtfully crafted interior bring a little more feeling to every mile.</p>
+            <div class="slide-tags"><span>Responsive drive</span><span>Refined interior</span><span>All-electric</span></div>
+            <a class="showcase-link" href="#model-s4">Explore AUREL S4</a>
+          </div>
+        </article>
+      </div>
+      <div class="showcase-controls" aria-label="Slideshow controls">
+        <button class="showcase-arrow" type="button" data-previous aria-label="Previous slide">‹</button>
+        <div class="slide-pickers" aria-label="Choose a slide">
+          <button class="slide-picker" type="button" data-go-to="0" aria-label="Show slide 1" aria-current="true"></button>
+          <button class="slide-picker" type="button" data-go-to="1" aria-label="Show slide 2" aria-current="false"></button>
+          <button class="slide-picker" type="button" data-go-to="2" aria-label="Show slide 3" aria-current="false"></button>
+        </div>
+        <button class="showcase-toggle" type="button" data-toggle-play aria-label="Pause slideshow" aria-pressed="false">
+          <svg data-pause-icon viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3v10M12 3v10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <svg data-play-icon viewBox="0 0 16 16" aria-hidden="true" hidden><path d="m5 3 8 5-8 5V3Z" fill="currentColor"/></svg>
+        </button>
+        <button class="showcase-arrow" type="button" data-next aria-label="Next slide">›</button>
+      </div>
+    </section>
+
+    <section class="lineup-gallery" aria-labelledby="lineup-title">
+      <div class="wrap">
+        <div class="lineup-heading">
+          <h2 id="lineup-title">Explore the lineup.</h2>
+          <a href="#models">Compare all models&nbsp; ›</a>
+        </div>
+        <div class="gallery-grid">
+          <article class="gallery-card" data-gallery>
+            <figure class="gallery-photo">
+              <img data-gallery-image src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1100&q=85" alt="Illustrative photograph of a coupe">
+              <figcaption class="gallery-view-label" data-gallery-label>Exterior · Illustrative photo</figcaption>
+            </figure>
+            <div class="gallery-views" aria-label="AUREL A7 illustrative photo views">
+              <button class="gallery-view" type="button" data-image="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1100&q=85" data-alt="Illustrative photograph of a coupe" data-label="Exterior · Illustrative photo" aria-current="true">Exterior</button>
+              <button class="gallery-view" type="button" data-image="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1100&q=85" data-alt="Illustrative photograph of a sports coupe on a mountain road" data-label="Road · Illustrative photo">Road</button>
+              <button class="gallery-view" type="button" data-image="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1100&q=85" data-alt="Illustrative photograph of a sedan in an urban setting" data-label="Street · Illustrative photo">Street</button>
+            </div>
+            <div class="gallery-copy">
+              <p class="gallery-badge">AUREL CONCEPT</p>
+              <h3>AUREL A7</h3>
+              <p class="gallery-tagline">An electric grand tourer with a low profile and a considered, driver-focused cabin.</p>
+              <p class="gallery-price">Illustrative price from $54,900<sup>1</sup></p>
+              <p class="gallery-finance">Concept pricing only. Final specifications, pricing, and availability are not set.</p>
+              <div class="gallery-features"><span>Electric grand touring</span><span>Driver-focused cabin</span></div>
+              <div class="gallery-actions"><a class="gallery-learn" href="#model-a7">Explore A7</a><a class="gallery-buy" href="#contact">Test drive&nbsp; ›</a></div>
+            </div>
+          </article>
+          <article class="gallery-card" data-gallery>
+            <figure class="gallery-photo">
+              <img data-gallery-image src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1100&q=85" alt="Illustrative photograph of an SUV">
+              <figcaption class="gallery-view-label" data-gallery-label>Exterior · Illustrative photo</figcaption>
+            </figure>
+            <div class="gallery-views" aria-label="AUREL X5 illustrative photo views">
+              <button class="gallery-view" type="button" data-image="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1100&q=85" data-alt="Illustrative photograph of an SUV" data-label="Exterior · Illustrative photo" aria-current="true">Exterior</button>
+              <button class="gallery-view" type="button" data-image="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1100&q=85" data-alt="Illustrative photograph of a sports coupe on a mountain road" data-label="Road · Illustrative photo">Road</button>
+              <button class="gallery-view" type="button" data-image="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1100&q=85" data-alt="Illustrative photograph of a coupe" data-label="Street · Illustrative photo">Street</button>
+            </div>
+            <div class="gallery-copy">
+              <p class="gallery-badge">AUREL CONCEPT</p>
+              <h3>AUREL X5</h3>
+              <p class="gallery-tagline">An all-electric SUV concept pairing everyday versatility with a clean, modern profile.</p>
+              <p class="gallery-price">Illustrative price from $62,500<sup>1</sup></p>
+              <p class="gallery-finance">Concept pricing only. Final specifications, pricing, and availability are not set.</p>
+              <div class="gallery-features"><span>All-electric SUV</span><span>Versatile cabin</span></div>
+              <div class="gallery-actions"><a class="gallery-learn" href="#model-x5">Explore X5</a><a class="gallery-buy" href="#contact">Test drive&nbsp; ›</a></div>
+            </div>
+          </article>
+          <article class="gallery-card" data-gallery>
+            <figure class="gallery-photo">
+              <img data-gallery-image src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1100&q=85" alt="Illustrative photograph of a sedan">
+              <figcaption class="gallery-view-label" data-gallery-label>Exterior · Illustrative photo</figcaption>
+            </figure>
+            <div class="gallery-views" aria-label="AUREL S4 illustrative photo views">
+              <button class="gallery-view" type="button" data-image="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1100&q=85" data-alt="Illustrative photograph of a sedan" data-label="Exterior · Illustrative photo" aria-current="true">Exterior</button>
+              <button class="gallery-view" type="button" data-image="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1100&q=85" data-alt="Illustrative photograph of an SUV on a scenic road" data-label="Road · Illustrative photo">Road</button>
+              <button class="gallery-view" type="button" data-image="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1100&q=85" data-alt="Illustrative photograph of a sports coupe on a mountain road" data-label="Street · Illustrative photo">Street</button>
+            </div>
+            <div class="gallery-copy">
+              <p class="gallery-badge">AUREL CONCEPT</p>
+              <h3>AUREL S4</h3>
+              <p class="gallery-tagline">A refined electric sedan concept with a purposeful stance and a clean, uncluttered interior.</p>
+              <p class="gallery-price">Illustrative price from $48,900<sup>1</sup></p>
+              <p class="gallery-finance">Concept pricing only. Final specifications, pricing, and availability are not set.</p>
+              <div class="gallery-features"><span>Electric sedan</span><span>Refined interior</span></div>
+              <div class="gallery-actions"><a class="gallery-learn" href="#model-s4">Explore S4</a><a class="gallery-buy" href="#contact">Test drive&nbsp; ›</a></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="shopping-help" aria-labelledby="shopping-help-title">
+      <div class="wrap">
+        <div class="shopping-help-heading">
+          <p class="eyebrow">A more considered way to buy</p>
+          <h2 id="shopping-help-title">Make the next step yours.</h2>
+        </div>
+        <div class="shopping-help-viewport">
+        <div class="shopping-help-grid" id="shopping-help-carousel" role="region" aria-label="Car buying guide" aria-roledescription="carousel">
+          <article class="shopping-help-card" role="group" aria-roledescription="slide" aria-label="1 of 7">
+            <div class="shopping-help-copy">
+              <p class="eyebrow">PURCHASE OPTIONS</p>
+              <h3>A good decision starts with a clear picture.</h3>
+              <p>Compare the AUREL concepts and review the details that matter. Prices on this page are illustrative; no financing rates or purchase programs have been established.</p>
+              <a class="shopping-help-link" href="#models">Compare the vehicles <span aria-hidden="true">›</span></a>
+            </div>
+            <div class="shopping-help-image-wrap">
+              <img class="shopping-help-image" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1000&q=85" alt="Illustrative stock photograph of a car viewed from the front" loading="lazy">
+              <button class="shopping-help-expand" type="button" data-help-toggle aria-expanded="false" aria-label="More about purchase options">+</button>
+            </div>
+            <div class="shopping-help-details" hidden><p>A real vehicle offer should show the selling price, taxes, optional equipment, and applicable fees before you commit. AUREL has no live inventory or purchase program.</p></div>
+          </article>
+          <article class="shopping-help-card" role="group" aria-roledescription="slide" aria-label="2 of 7">
+            <div class="shopping-help-copy">
+              <p class="eyebrow">TRADE-IN GUIDE</p>
+              <h3>Your current car is part of the conversation.</h3>
+              <p>A real trade-in value depends on an appraisal, vehicle history and local market conditions. AUREL has no live valuation tool or trade-in offers.</p>
+              <a class="shopping-help-link" href="#models">Explore the AUREL range <span aria-hidden="true">›</span></a>
+            </div>
+            <div class="shopping-help-image-wrap">
+              <img class="shopping-help-image" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1000&q=85" alt="Illustrative stock photograph of a vehicle on a road" loading="lazy">
+              <button class="shopping-help-expand" type="button" data-help-toggle aria-expanded="false" aria-label="More about trade-ins">+</button>
+            </div>
+            <div class="shopping-help-details" hidden><p>For an accurate appraisal, compare the written offer with your vehicle's condition, history, mileage, and local market. No AUREL trade-in service is currently available.</p></div>
+          </article>
+          <article class="shopping-help-card" role="group" aria-roledescription="slide" aria-label="3 of 7">
+            <div class="shopping-help-copy">
+              <p class="eyebrow">TIME BEHIND THE WHEEL</p>
+              <h3>Some things make more sense in the driver's seat.</h3>
+              <p>Explore the concept range and tell us which model you would like to experience. This sample form does not create a real test-drive booking.</p>
+              <button class="shopping-help-link" type="button" data-open-modal="test-drive">Preview a test-drive request <span aria-hidden="true">›</span></button>
+            </div>
+            <div class="shopping-help-image-wrap">
+              <img class="shopping-help-image" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1000&q=85" alt="Illustrative stock photograph of a sports car on a scenic road" loading="lazy">
+              <button class="shopping-help-expand" type="button" data-help-toggle aria-expanded="false" aria-label="More about test drives">+</button>
+            </div>
+            <div class="shopping-help-details" hidden><p>Before arranging a real test drive, confirm that the exact vehicle is available, who may drive it, and what identification or insurance is required. AUREL test drives are not available.</p></div>
+          </article>
+          <article class="shopping-help-card" role="group" aria-roledescription="slide" aria-label="4 of 7">
+            <div class="shopping-help-copy">
+              <p class="eyebrow">FINANCE CHECKLIST</p>
+              <h3>Look beyond the monthly payment.</h3>
+              <p>Understand the full cost of ownership before choosing how to pay. AUREL does not offer financing or provide rates.</p>
+              <a class="shopping-help-link" href="#models">Review the concept lineup <span aria-hidden="true">›</span></a>
+            </div>
+            <div class="shopping-help-image-wrap">
+              <img class="shopping-help-image" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1000&q=85" alt="Illustrative stock photograph of a car at a dealership" loading="lazy">
+              <button class="shopping-help-expand" type="button" data-help-toggle aria-expanded="false" aria-label="More about financing">+</button>
+            </div>
+            <div class="shopping-help-details" hidden><p>For any real finance agreement, compare the APR, term, deposit, total amount payable, fees, and any final payment. Ask a licensed provider for terms that apply to you.</p></div>
+          </article>
+          <article class="shopping-help-card" role="group" aria-roledescription="slide" aria-label="5 of 7">
+            <div class="shopping-help-copy">
+              <p class="eyebrow">OWNERSHIP, MADE CLEAR</p>
+              <h3>Ask the questions that matter after the sale.</h3>
+              <p>Warranty coverage, servicing, and repair support are part of choosing a car. AUREL has no production vehicles or owner services.</p>
+              <a class="shopping-help-link" href="#technology">Explore the concept <span aria-hidden="true">›</span></a>
+            </div>
+            <div class="shopping-help-image-wrap">
+              <img class="shopping-help-image" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1000&q=85" alt="Illustrative stock photograph of a sports car on an open road" loading="lazy">
+              <button class="shopping-help-expand" type="button" data-help-toggle aria-expanded="false" aria-label="More about vehicle ownership">+</button>
+            </div>
+            <div class="shopping-help-details" hidden><p>Before you buy any vehicle, review the written warranty, service schedule, repair options, and roadside assistance terms with its manufacturer or seller. AUREL does not provide these services.</p></div>
+          </article>
+          <article class="shopping-help-card shopping-help-card-delivery" role="group" aria-roledescription="slide" aria-label="6 of 7">
+            <div class="shopping-help-copy">
+              <p class="eyebrow">DELIVERY &amp; PICKUP</p>
+              <h3>Flexible delivery. Easy pickup.</h3>
+              <p>Choose the handover that suits your day: have your car delivered or collect it in person. AUREL is a concept, so these options are illustrative and not currently available.</p>
+              <a class="shopping-help-link" href="#models">Explore the AUREL range <span aria-hidden="true">›</span></a>
+            </div>
+            <div class="shopping-help-image-wrap">
+              <img class="shopping-help-image" src="https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?auto=format&fit=crop&w=1000&q=85" alt="Illustrative stock photograph of a blue car beside the coast at sunset" loading="lazy">
+              <button class="shopping-help-expand" type="button" data-help-toggle aria-expanded="false" aria-label="More about delivery and pickup">+</button>
+            </div>
+            <div class="shopping-help-details" hidden><p>For a real vehicle purchase, confirm whether delivery or pickup is offered, the schedule, any fees, required paperwork, and the vehicle's condition at handover. AUREL does not provide delivery or pickup services.</p></div>
+          </article>
+          <article class="shopping-help-card shopping-help-card-specialist" role="group" aria-roledescription="slide" aria-label="7 of 7">
+            <div class="shopping-help-copy">
+              <p class="eyebrow">GUIDED SHOPPING</p>
+              <h3>A little expert guidance can make all the difference.</h3>
+              <p>Talk through the AUREL concepts, compare the models, and get help deciding what to look for in your next car.</p>
+              <button class="shopping-help-link" type="button" data-open-modal="specialist">Talk to a specialist <span aria-hidden="true">›</span></button>
+            </div>
+            <div class="shopping-help-image-wrap">
+              <img class="shopping-help-image" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=1000&q=85" alt="Illustrative stock portrait of a professional car-buying specialist" loading="lazy">
+              <button class="shopping-help-expand" type="button" data-help-toggle aria-expanded="false" aria-label="More about guided shopping">+</button>
+            </div>
+            <div class="shopping-help-details" hidden><p>This portrait is illustrative and does not depict an AUREL employee. AUREL is a fictional concept brand; this preview form does not connect you with a real specialist.</p></div>
+          </article>
+        </div>
+        </div>
+        <div class="shopping-help-controls" aria-label="Car buying guide controls">
+          <button class="shopping-help-arrow" type="button" data-help-previous aria-label="Previous car buying guide cards" disabled>‹</button>
+          <button class="shopping-help-arrow" type="button" data-help-next aria-label="Next car buying guide cards">›</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="essentials" aria-labelledby="essentials-title">
+        <div class="wrap">
+          <div class="essentials-heading">
+            <h2 id="essentials-title">Accessories and parts.</h2>
+            <a href="accessories.html">Shop accessories and parts&nbsp; ›</a>
+          </div>
+          <div class="essentials-grid">
+            <article class="essential-card essential-card-charging">
+              <div class="essential-copy">
+                <h3>Accessories for every journey.</h3>
+                <p>From home-charging essentials to thoughtful ways to organize your cabin, explore accessories designed to make every drive feel more like yours.</p>
+                <a class="essential-link" href="accessories.html#accessories">Shop accessories&nbsp; ›</a>
+              </div>
+              <img class="essential-image" src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=85" alt="Illustrative electric vehicle charging accessory; AUREL equipment is not shown" loading="lazy">
+            </article>
+            <article class="essential-card essential-card-cabin">
+              <div class="essential-copy">
+                <h3>Parts made to fit.</h3>
+                <p>Keep your AUREL at its best with replacement parts selected for fit and lasting performance. Final parts, compatibility, and availability are not yet established.</p>
+                <a class="essential-link" href="accessories.html#parts">Shop parts&nbsp; ›</a>
+              </div>
+              <img class="essential-image" src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1200&q=85" alt="Illustrative automotive engine; not an AUREL production part" loading="lazy">
+            </article>
+          </div>
+        </div>
+    </section>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-content">
+        <p class="eyebrow">All-electric grand touring</p>
+        <h2 id="hero-title">AUREL A7</h2>
+        <p class="hero-copy">A new point of view.</p>
+        <div class="hero-actions">
+          <a class="button" href="#models">Explore the range</a>
+          <a class="text-link" href="#technology">See what’s new&nbsp; ›</a>
+        </div>
+      </div>
+      <figure class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2200&q=88" alt="AUREL A7-inspired electric grand touring car on the road">
+        <figcaption class="hero-caption">AUREL A7 shown in Alpine Silver. Concept image.</figcaption>
+      </figure>
+      <div class="hero-specs" aria-label="AUREL A7 highlights">
+        <div><strong>All-electric</strong><span>Grand touring</span></div>
+        <div><strong>Driver-first</strong><span>Designed around you</span></div>
+        <div><strong>Concept price $54,900</strong><span>Illustrative only</span></div>
+      </div>
+    </section>
+
+    <section class="intro wrap" id="approach">
+      <p class="eyebrow">Designed around you</p>
+      <h2>More than a way to get there.</h2>
+      <p>Every detail has a purpose. From the quiet confidence of the cabin to the intuitive technology at your fingertips, AUREL makes every journey feel like time well spent.</p>
+    </section>
+
+    <section class="models wrap" id="models">
+      <div class="section-heading">
+        <h2>Find your AUREL.</h2>
+        <p>Three distinct expressions of the same idea: a better way forward.</p>
+      </div>
+      <div class="model-grid">
+        <article class="model-card" id="model-a7">
+          <div class="model-image"><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1000&q=82" alt="Sculpted silver performance coupe" loading="lazy"></div>
+          <div class="model-info"><div><h3>AUREL A7</h3><p>Electric grand touring · Concept price $54,900</p></div><a class="arrow-link" href="#contact" aria-label="Explore AUREL A7">↗</a></div>
+        </article>
+        <article class="model-card" id="model-x5">
+          <div class="model-image"><img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1000&q=82" alt="Modern electric SUV on a mountain road" loading="lazy"></div>
+          <div class="model-info"><div><h3>AUREL X5</h3><p>All-electric SUV · Concept price $62,500</p></div><a class="arrow-link" href="#contact" aria-label="Explore AUREL X5">↗</a></div>
+        </article>
+        <article class="model-card" id="model-s4">
+          <div class="model-image"><img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1000&q=82" alt="Refined electric sedan parked in the city" loading="lazy"></div>
+          <div class="model-info"><div><h3>AUREL S4</h3><p>Electric sports sedan · Concept price $48,900</p></div><a class="arrow-link" href="#contact" aria-label="Explore AUREL S4">↗</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="feature wrap" id="technology">
+      <div class="feature-content">
+        <p class="eyebrow">The drive, reimagined</p>
+        <h2>Quietly ahead<br>of the curve.</h2>
+        <p>Responsive electric performance and an intuitive, beautifully simple cockpit make the everyday feel exceptional.</p>
+        <a class="button button-light" href="#contact">Discover the technology</a>
+      </div>
+    </section>
+
+    <section class="promise wrap">
+      <div class="promise-head">
+        <p class="eyebrow">Made for what matters</p>
+        <h2>Progress, with purpose.</h2>
+        <p>We believe the future of driving should feel effortless. That means paying attention to the details that make a real difference.</p>
+      </div>
+      <div class="promise-grid">
+        <article class="promise-item"><span>01 — RANGE</span><h3>Go further, feel freer.</h3><p>Long-range electric confidence and fast charging help keep your plans moving.</p></article>
+        <article class="promise-item"><span>02 — CRAFT</span><h3>Every detail, considered.</h3><p>Thoughtful materials, a calm cabin, and purposeful design inside and out.</p></article>
+        <article class="promise-item"><span>03 — CARE</span><h3>Here for the journey.</h3><p>Personal support from your first visit through every mile that follows.</p></article>
+      </div>
+    </section>
+
+    <section class="cta wrap" id="contact">
+      <div class="cta-box">
+        <p class="eyebrow">Your next drive starts here</p>
+        <h2>Meet your AUREL.</h2>
+        <p>Come experience the difference from the driver's seat.</p>
+        <button class="button" type="button" data-open-modal>Find a test drive</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <a class="wordmark" href="#" aria-label="AUREL home">AUREL</a>
+        <div class="footer-links"><a href="#models">Vehicles</a><a href="#approach">About AUREL</a><a href="#technology">Innovation</a><a href="#contact">Contact</a></div>
+      </div>
+      <div class="footer-bottom">© 2026 AUREL Automotive. AUREL is a fictional concept brand; its vehicles are not available for purchase. <sup>1</sup>Prices, specifications, and availability are illustrative and are not an offer for sale.<br>Photography is illustrative, supplied by Unsplash, and does not depict AUREL production vehicles.</div>
+    </div>
+  </footer>
+
+  <div class="modal" id="test-drive-modal" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+    <div class="dialog">
+      <button class="close-modal" type="button" aria-label="Close dialog">×</button>
+      <h2 id="dialog-title">Tell us what you’d like to drive.</h2>
+      <p>AUREL is a fictional concept brand. This sample form is for preview only; it does not transmit or store your details.</p>
+      <form id="test-drive-form">
+        <div class="field"><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required></div>
+        <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="model">Model of interest</label><select id="model" name="model" required><option value="">Choose a model</option><option>AUREL A7</option><option>AUREL X5</option><option>AUREL S4</option></select></div>
+        <button class="button" type="submit">Preview request</button>
+        <p class="form-message" id="form-message" role="status">Demo only: your details were not sent or stored. Connect the appropriate service before accepting real requests.</p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
+    const modal = document.querySelector("#test-drive-modal");
+    const closeButton = document.querySelector(".close-modal");
+    const form = document.querySelector("#test-drive-form");
+    const formMessage = document.querySelector("#form-message");
+    const showcase = document.querySelector("#drive-showcase");
+    const slides = [...showcase.querySelectorAll("[data-slide]")];
+    const slidePickers = [...showcase.querySelectorAll("[data-go-to]")];
+    const togglePlay = showcase.querySelector("[data-toggle-play]");
+    const pauseIcon = showcase.querySelector("[data-pause-icon]");
+    const playIcon = showcase.querySelector("[data-play-icon]");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let activeSlide = 0;
+    let isPlaying = !reducedMotion.matches;
+    let slideTimer;
+
+    function renderShowcase() {
+      slides.forEach((slide, index) => {
+        const isActive = index === activeSlide;
+        slide.classList.toggle("is-active", isActive);
+        slide.setAttribute("aria-hidden", String(!isActive));
+        slide.inert = !isActive;
+      });
+      slidePickers.forEach((picker, index) => {
+        picker.setAttribute("aria-current", String(index === activeSlide));
+      });
+      showcase.classList.toggle("is-playing", isPlaying);
+      togglePlay.setAttribute("aria-label", isPlaying ? "Pause slideshow" : "Play slideshow");
+      togglePlay.setAttribute("aria-pressed", String(!isPlaying));
+      pauseIcon.hidden = !isPlaying;
+      playIcon.hidden = isPlaying;
+    }
+
+    function goToSlide(index) {
+      activeSlide = (index + slides.length) % slides.length;
+      renderShowcase();
+      startShowcaseTimer();
+    }
+
+    function startShowcaseTimer() {
+      window.clearInterval(slideTimer);
+      if (isPlaying) {
+        slideTimer = window.setInterval(() => {
+          activeSlide = (activeSlide + 1) % slides.length;
+          renderShowcase();
+        }, 6000);
+      }
+    }
+
+    slidePickers.forEach((picker) => {
+      picker.addEventListener("click", () => goToSlide(Number(picker.dataset.goTo)));
+    });
+    showcase.querySelector("[data-previous]").addEventListener("click", () => goToSlide(activeSlide - 1));
+    showcase.querySelector("[data-next]").addEventListener("click", () => goToSlide(activeSlide + 1));
+    togglePlay.addEventListener("click", () => {
+      isPlaying = !isPlaying;
+      renderShowcase();
+      startShowcaseTimer();
+    });
+    showcase.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") goToSlide(activeSlide - 1);
+      if (event.key === "ArrowRight") goToSlide(activeSlide + 1);
+    });
+    reducedMotion.addEventListener("change", (event) => {
+      if (event.matches && isPlaying) isPlaying = false;
+      renderShowcase();
+      startShowcaseTimer();
+    });
+    renderShowcase();
+    startShowcaseTimer();
+
+    document.querySelectorAll("[data-gallery]").forEach((gallery) => {
+      const image = gallery.querySelector("[data-gallery-image]");
+      const caption = gallery.querySelector("[data-gallery-label]");
+      gallery.querySelectorAll("[data-image]").forEach((view) => {
+        view.addEventListener("click", () => {
+          image.src = view.dataset.image;
+          image.alt = view.dataset.alt;
+          caption.textContent = view.dataset.label;
+          gallery.querySelectorAll("[data-image]").forEach((button) => {
+            button.setAttribute("aria-current", String(button === view));
+          });
+        });
+      });
+    });
+
+    const helpCarousel = document.querySelector("#shopping-help-carousel");
+    const helpCards = [...helpCarousel.querySelectorAll(".shopping-help-card")];
+    const helpPrevious = document.querySelector("[data-help-previous]");
+    const helpNext = document.querySelector("[data-help-next]");
+
+    function updateHelpControls() {
+      const maxScroll = helpCarousel.scrollWidth - helpCarousel.clientWidth;
+      helpPrevious.disabled = helpCarousel.scrollLeft <= 1;
+      helpNext.disabled = helpCarousel.scrollLeft >= maxScroll - 1;
+    }
+
+    function moveHelpCarousel(direction) {
+      const cardWidth = helpCards[0].getBoundingClientRect().width;
+      const gap = Number.parseFloat(getComputedStyle(helpCarousel).columnGap);
+      const behavior = reducedMotion.matches ? "instant" : "smooth";
+      helpCarousel.scrollBy({ left: direction * (cardWidth + gap), behavior });
+      if (behavior === "instant") updateHelpControls();
+    }
+
+    helpPrevious.addEventListener("click", () => moveHelpCarousel(-1));
+    helpNext.addEventListener("click", () => moveHelpCarousel(1));
+    helpCarousel.addEventListener("scroll", updateHelpControls, { passive: true });
+    window.addEventListener("resize", updateHelpControls);
+    helpCarousel.querySelectorAll("[data-help-toggle]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const details = button.closest(".shopping-help-card").querySelector(".shopping-help-details");
+        const isExpanded = button.getAttribute("aria-expanded") === "true";
+        button.setAttribute("aria-expanded", String(!isExpanded));
+        button.setAttribute("aria-label", `${isExpanded ? "More" : "Less"} about ${button.getAttribute("aria-label").replace(/^(More|Less) about /, "")}`);
+        button.textContent = isExpanded ? "+" : "−";
+        details.hidden = isExpanded;
+      });
+    });
+    updateHelpControls();
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+      menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Open navigation" : "Close navigation");
+      navLinks.classList.toggle("is-open", !isOpen);
+    });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open navigation");
+      });
+    });
+
+    function openModal(event) {
+      const isSpecialistRequest = event.currentTarget.dataset.openModal === "specialist";
+      document.querySelector("#dialog-title").textContent = isSpecialistRequest
+        ? "Let's find the right car for you."
+        : "Tell us what you’d like to drive.";
+      modal.querySelector(".dialog > p").textContent = isSpecialistRequest
+        ? "AUREL is a fictional concept brand. This preview does not connect you with a real specialist or send your details."
+        : "AUREL is a fictional concept brand. This sample form is for preview only; it does not transmit or store your details.";
+      form.querySelector('[type="submit"]').textContent = isSpecialistRequest ? "Preview specialist request" : "Preview request";
+      modal.classList.add("is-open");
+      document.body.classList.add("modal-open");
+      document.querySelector("#name").focus();
+    }
+    function closeModal() {
+      modal.classList.remove("is-open");
+      document.body.classList.remove("modal-open");
+      formMessage.classList.remove("is-visible");
+    }
+
+    document.querySelectorAll("[data-open-modal]").forEach((button) => button.addEventListener("click", openModal));
+    closeButton.addEventListener("click", closeModal);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && modal.classList.contains("is-open")) closeModal();
+    });
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      formMessage.classList.add("is-visible");
+      form.reset();
+    });
+  </script>
+</body>
+</html>
